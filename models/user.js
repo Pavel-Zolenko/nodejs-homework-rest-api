@@ -9,7 +9,7 @@ const userSchema = new Schema({
         type: String,
         required: true,
     },
-     email: {
+    email: {
         type: String,
         required: [true, 'Email is required'],
         
@@ -33,6 +33,14 @@ const userSchema = new Schema({
         type: String,
         required: true,
     },
+    verify: {
+        type: Boolean,
+        default: false,
+    },
+    verificationToken: {
+        type: String,
+        required: [true, 'Verify token is required'],
+    },
 }, { versionKey: false, timestamps: true });
 
 userSchema.post('save', handleMongooseError);
@@ -50,10 +58,14 @@ const JoiLoginSchema = Joi.object({
     password: Joi.string().min(6).required(),    
 })
 
+const JoiEmailSchema = Joi.object({
+    email: Joi.string().required(),
+})
 
 const schemas = {
     JoiRegisterSchema,
     JoiLoginSchema,
+    JoiEmailSchema,
 }
 
 const User = model('user', userSchema);
